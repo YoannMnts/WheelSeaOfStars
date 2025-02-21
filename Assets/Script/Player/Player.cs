@@ -1,18 +1,19 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private Figure figure;
+    private Figure figureG, figureD;
     [SerializeField]
     private Wall wall;
     private int pvMax = 10;
     private int currentPv;
     private int currentPvWall;
     [SerializeField]
-    private TextMeshProUGUI currentPvText;
+    private TextMeshProUGUI currentPvText, wallPvText;
 
     void Start()
     {
@@ -28,13 +29,13 @@ public class Player : MonoBehaviour
     {
         if (enemie.currentPvWall > 0)
         {
-            wall.DamageWall();
+            enemie.GetWall().DamageWall(enemie);
         }
         else
         {
             enemie.currentPv--;
             enemie.currentPv = Mathf.Clamp(enemie.currentPv, 0, pvMax);
-            figure.GainXp(1);
+            figureG.GainXp(1);
         }
     }
 
@@ -46,5 +47,15 @@ public class Player : MonoBehaviour
     public void SetCurrentPvWall(int value)
     {
         currentPvWall = value;
+    }
+
+    public TextMeshProUGUI GetWallPvText()
+    {
+        return wallPvText;
+    }
+
+    public Wall GetWall()
+    {
+        return wall;
     }
 }

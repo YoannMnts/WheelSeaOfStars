@@ -6,38 +6,21 @@ using UnityEngine.PlayerLoop;
 public class Wall : MonoBehaviour
 {
     private int pvMaxWall = 5;
-    private Player player;
-    private int currentPvWallClamp = 1;
-    private TextMeshProUGUI wallTextMesh;
+    private int pvWallTemp;
     
-
-    public void SetClamp()
+    public void BuildWall(Player player)
     {
-        currentPvWallClamp = player.GetCurrentPvWall();
+        pvWallTemp = player.GetCurrentPvWall();
+        pvWallTemp++;
+        player.SetCurrentPvWall(Mathf.Clamp(pvWallTemp, 1, pvMaxWall));
+        player.GetWallPvText().text = player.GetCurrentPvWall().ToString();
     }
 
-    public void UpdateText(TextMeshProUGUI pvWallText)
+    public void DamageWall(Player player)
     {
-        pvWallText.text = player.GetCurrentPvWall().ToString();
-        wallTextMesh = pvWallText;
-    }
-
-    public void BuildWall()
-    {
-        currentPvWallClamp++;
-        player.SetCurrentPvWall(Mathf.Clamp(currentPvWallClamp, 1, pvMaxWall));
-        UpdateText(wallTextMesh);
-    }
-
-    public void DamageWall()
-    {
-        currentPvWallClamp--;
-        player.SetCurrentPvWall(Mathf.Clamp(currentPvWallClamp, 0, pvMaxWall));
-        UpdateText(wallTextMesh);
-    }
-
-    public void SetPlayer(Player player)
-    {
-        this.player = player;
+        pvWallTemp = player.GetCurrentPvWall();
+        pvWallTemp--;
+        player.SetCurrentPvWall(Mathf.Clamp(pvWallTemp, 0, pvMaxWall));
+        player.GetWallPvText().text = player.GetCurrentPvWall().ToString();
     }
 }
