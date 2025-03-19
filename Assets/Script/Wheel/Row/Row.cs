@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class Row : MonoBehaviour
 {
+    [SerializeField] private Player player1, Player2;
     public void GiveXp(int ind)
     {
         if (CanXp() == 1 && ind == 0)
         { 
-            Debug.Log("je suis Diamond et je donne l'xp");
+            player1.GetFigure("L").GainXp(1);
         }
         else if (CanXp() == 1 && ind == 1)
         { 
-            Debug.Log("je suis Square et je donne l'xp");
+            player1.GetFigure("R").GainXp(1);
         }
         
         //int index = (int)symboles;

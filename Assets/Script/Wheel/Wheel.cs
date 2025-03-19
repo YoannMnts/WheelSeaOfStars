@@ -9,7 +9,7 @@ public class Wheel : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            int curentSymboles = Random.Range(0, 7);
+            int curentSymboles = Random.Range(0, 4);
             rowTab[i] = curentSymboles;
             if (curentSymboles == 0 || curentSymboles == 1)
                 row.GiveXp(curentSymboles);

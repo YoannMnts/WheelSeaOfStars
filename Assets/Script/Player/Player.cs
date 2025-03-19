@@ -58,4 +58,16 @@ public class Player : MonoBehaviour
     {
         return wall;
     }
+
+    public Figure GetFigure(String LorR)
+    {
+        if (LorR == "L")
+        {
+            return figureG;
+        }
+        else
+        {
+            return figureD;
+        }
+    }
 }
