@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,16 +8,20 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private Figure figureG, figureD;
-    [SerializeField]
     private Wall wall;
     private int pvMax = 10;
     private int currentPv;
     private int currentPvWall;
-    [SerializeField]
+    [SerializeField] private GameObject playerCanvas;
     private TextMeshProUGUI currentPvText, wallPvText;
+    private LevelManager levelManager;
 
     void Start()
     {
+        currentPvText = playerCanvas.transform.Find("PlayerHp").GetComponent<TextMeshProUGUI>();
+        wallPvText = playerCanvas.transform.Find("Wall").GetComponent<TextMeshProUGUI>();
+        levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        wall = GameObject.Find("WallManager").GetComponent<Wall>();
         currentPv = pvMax;
     }
 
@@ -25,11 +30,12 @@ public class Player : MonoBehaviour
         currentPvText.text = currentPv.ToString();
     }
 
-    public void Attack(Player enemie)
+    public void Attack()
     {
+        Player enemie = levelManager.GetEnemie();
         if (enemie.currentPvWall > 0)
         {
-            enemie.GetWall().DamageWall(enemie);
+            wall.DamageWall();
         }
         else
         {
@@ -37,6 +43,11 @@ public class Player : MonoBehaviour
             enemie.currentPv = Mathf.Clamp(enemie.currentPv, 0, pvMax);
             figureG.GainXp(1);
         }
+    }
+
+    public GameObject GetPlayerCanvas()
+    {
+        return playerCanvas;
     }
 
     public int GetCurrentPvWall()
@@ -52,11 +63,6 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI GetWallPvText()
     {
         return wallPvText;
-    }
-
-    public Wall GetWall()
-    {
-        return wall;
     }
 
     public Figure GetFigure(String LorR)
