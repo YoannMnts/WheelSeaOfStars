@@ -1,5 +1,10 @@
 using System;
+using TMPro;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 using Random = UnityEngine.Random;
 
 public class Wheel : MonoBehaviour
@@ -9,6 +14,8 @@ public class Wheel : MonoBehaviour
     private int spinNumber;
     private LevelManager levelManager;
     private Wall wall;
+    [SerializeField] private bool[] lockTab;
+    [SerializeField] private int[] wheelTab;
 
     private void Start()
     {
@@ -16,27 +23,72 @@ public class Wheel : MonoBehaviour
         wall = GameObject.Find("WallManager").GetComponent<Wall>();
     }
 
-    void CanIEndTurn()
-    {
-        if (spinNumber >= 3)
-        {
-            levelManager.EndTurn();
-            spinNumber = 0;
-        }
-    }
-
     public void Spin()
     {
+        GameObject.Find("EndTurnButton").GetComponent<Button>().interactable = true;
         for (int i = 0; i < 5; i++)
         {
             int curentSymboles = Random.Range(0, 4);
-            rowTab[i] = curentSymboles;
+            if (lockTab[i] == false)
+            {
+                rowTab[i] = curentSymboles;
+                row.rowGoTab[i].GetComponentInChildren<TextMeshProUGUI>().text = curentSymboles.ToString();
+            }
             if (curentSymboles == 0 || curentSymboles == 1)
                 row.GiveXp(curentSymboles, levelManager.GetCurrentPlayer());
-            else if (curentSymboles == 2)
-                wall.BuildWall();
         }
         spinNumber++;
-        CanIEndTurn();
+        levelManager.CanIEndTurn();
+    }
+
+    public int GetSpinNumber()
+    {
+        return spinNumber;
+    }
+
+    public void SetSpinNumber(int value)
+    {
+        spinNumber = value;
+    }
+
+    public void MakeWheelTab()
+    {
+        for (int i = 0; i < rowTab.Length; i++)
+        {
+            wheelTab[rowTab[i]]++;
+        }
+    }
+    public int[] GetWheelTab()
+    {
+        return wheelTab;
+    }
+
+    public void ResetWheelTab()
+    {
+        for (int i = 0; i < wheelTab.Length; i++)
+        {
+            wheelTab[i] = 0;
+        }
+    }
+
+    public void ResetLockTab()
+    {
+        for (int i = 0; i < lockTab.Length; i++)
+        {
+            lockTab[i] = false;
+        }
+    }
+
+    public void ResetRowTab()
+    {
+        for (int i = 0; i < rowTab.Length; i++)
+        {
+            rowTab[i] = 3;
+        }
+    }
+
+    public void LockRow(int index)
+    {
+        lockTab[index] = !lockTab[index];
     }
 }
