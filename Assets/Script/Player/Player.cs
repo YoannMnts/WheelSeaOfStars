@@ -6,8 +6,7 @@ using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private Figure figureG, figureD;
+    [SerializeField] private Figure figureL, figureR;
     private Wall wall;
     private int pvMax = 10;
     private int currentPv;
@@ -30,9 +29,10 @@ public class Player : MonoBehaviour
         currentPvText.text = currentPv.ToString();
     }
 
-    public void Attack()
+    public void Attack(Figure currentFigure)
     {
         Player enemie = levelManager.GetEnemie();
+        currentFigure.pointNeedToAtk++;
         if (enemie.currentPvWall > 0)
         {
             wall.DamageWall();
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
         {
             enemie.currentPv--;
             enemie.currentPv = Mathf.Clamp(enemie.currentPv, 0, pvMax);
-            figureG.GainXp(1);
+            currentFigure.GainXp(1);
         }
     }
 
@@ -69,11 +69,11 @@ public class Player : MonoBehaviour
     {
         if (LorR == "L")
         {
-            return figureG;
+            return figureL;
         }
         else
         {
-            return figureD;
+            return figureR;
         }
     }
 }

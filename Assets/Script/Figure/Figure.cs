@@ -12,8 +12,10 @@ public class Figure : MonoBehaviour
     private int currentLevelClamp = 1;
     [SerializeField]
     private TextMeshProUGUI currentXpLevelText, currentLevelText;
+
+    public int pointNeedToAtk;
     
-    private void Update()
+    public void Update()
     {
         if (currentXp >= xpNeedToLevelUp)
         {
